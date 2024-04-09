@@ -4,10 +4,18 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.led.CANdle;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.function.IntSupplier;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
+import com.ctre.phoenix.led.CANdle;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import frc.robot.Constants.LEDConstants;
+import frc.robot.ledTools.Animation.AnimationState;
+import frc.robot.ledTools.finals.LEDColor;
 
 public class LEDSubsystem extends SubsystemBase {
 
@@ -30,7 +38,14 @@ public class LEDSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    
+    new AnimationState(
+      input -> {
+        return new LEDColor();
+      },
+      new HashMap<String, IntSupplier>(Map.ofEntries(
+        new SimpleEntry<String, IntSupplier>("test", () -> 0)
+      ))
+    );
   }
 
   // --- PRIVATE FUNCTIONS ---
