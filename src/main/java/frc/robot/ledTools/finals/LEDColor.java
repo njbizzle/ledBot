@@ -39,6 +39,7 @@ public class LEDColor extends Color {
   public LEDColor merge(LEDColor other) { // overlay other if needed
     double aThis = (double) a / 255d;
     double aOther = (double) other.a / 255d;
+    if (aThis + aOther > 255) aOther = aThis - 255;
     
     return new LEDColor(
       (int) (r * aThis) + (int) (other.r * aOther),
