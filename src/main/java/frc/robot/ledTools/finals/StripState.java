@@ -11,6 +11,11 @@ public final class StripState {
   }
 
 
+  public StripState(int resolution) {
+    this(new LEDColor[resolution]);
+  }
+
+
   public StripState(LEDColor[] colors) {
     if (colors.length != 0){
       for (LEDColor color : colors) {
@@ -23,6 +28,7 @@ public final class StripState {
       this.colors = new LEDColor[]{new LEDColor()};
     }
   }
+
   public static StripState merge(ArrayList<StripState> states) {
     StripState returnState = new StripState();
 
