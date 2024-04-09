@@ -14,7 +14,7 @@ import com.ctre.phoenix.led.CANdle;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants.LEDConstants;
-import frc.robot.ledTools.Animation.AnimationState;
+import frc.robot.ledTools.animation.AnimationState;
 import frc.robot.ledTools.finals.LEDColor;
 
 public class LEDSubsystem extends SubsystemBase {

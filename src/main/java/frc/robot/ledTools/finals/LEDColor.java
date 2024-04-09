@@ -2,7 +2,7 @@ package frc.robot.ledTools.finals;
 
 import edu.wpi.first.wpilibj.util.Color;
 
-public class LEDColor extends Color {
+public final class LEDColor extends Color {
 
   public final int r;
   public final int g;

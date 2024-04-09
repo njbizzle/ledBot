@@ -1,4 +1,4 @@
-package frc.robot.ledTools.Animation;
+package frc.robot.ledTools.animation;
 
 import frc.robot.ledTools.finals.LEDColor;
 import frc.robot.ledTools.finals.StripState;

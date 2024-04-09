@@ -1,4 +1,4 @@
-package frc.robot.ledTools.Animation;
+package frc.robot.ledTools.animation;
 
 import edu.wpi.first.wpilibj.Timer;
 
