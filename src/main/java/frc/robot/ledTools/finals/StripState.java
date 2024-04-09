@@ -4,45 +4,39 @@ import java.util.ArrayList;
 
 public final class StripState {
 
-  public final LEDColor[] m_colors;
+  public final LEDColor[] colors;
 
   public StripState() {
-    this(new LEDColor[m_constraints.getCount()]);
+    this(new LEDColor[]{new LEDColor()});
   }
 
 
   public StripState(LEDColor[] colors) {
-    this(colors, new StripConstraints(0, 1));
+    if (colors.length != 0){
+      for (LEDColor color : colors) {
+        if (color == null) color = new LEDColor();
+      }
+      
+      this.colors = colors;
+    } 
+    else {
+      this.colors = new LEDColor[]{new LEDColor()};
+    }
   }
-
-  public StripState(LEDColor[] colors, StripConstraints constraints) {
-    m_constraints = constraints;
-    m_colors = colors;
-  }
-
   public static StripState merge(ArrayList<StripState> states) {
-    if (states == null || states.size() <= 0) return null;
-
     StripState returnState = new StripState();
 
     for (StripState state : states) {
-      returnState = merge(returnState, state);
+      returnState.merge(state);
     }
 
     return returnState;
   }
 
-  public LEDColor[] getColors() {
-    return m_colors;
-  }
-  public StripConstraints getContraints() {
-    return new StripConstraints(m_constraints);
-  }
+  public StripState scale(int resolution) {
+    LEDColor[] colorsOut = new LEDColor[resolution];
 
-  public StripState rescale(StripConstraints constraints) {
-    LEDColor[] colorsOut = new LEDColor[constraints.getCount()];
-
-    double step = (double) constraints.getCount() / (double) m_colors.length;
+    double step = (double) resolution / (double) colors.length;
     double indexDouble = 0;
     int indexInt = 0;
 
@@ -50,41 +44,34 @@ public final class StripState {
       indexInt = (int) Math.round(indexDouble);
 
       indexInt = Math.max(indexInt, 0);
-      indexInt = Math.min(indexInt, m_colors.length);
+      indexInt = Math.min(indexInt, colors.length);
 
-      colorsOut[rescaledIndex] = m_colors[indexInt];
+      colorsOut[rescaledIndex] = colors[indexInt];
 
       indexDouble += step;
     }
 
-    return new StripState(colorsOut, new StripConstraints(constraints.getStartIndex(), constraints.getCount()));
+    return new StripState(colorsOut);
   }
 
-  public static StripState merge(StripState state1, StripState state2) {
+  public StripState merge(StripState other) {
 
-    StripConstraints constraints = 
-      (state1.getContraints().getCount() > state2.getContraints().getCount()) ? 
-      state1.getContraints() : state2.getContraints();
+    int resolution = colors.length;
 
-    state1 = state1.rescale(constraints); // might be totatlly not needed
-    state2 = state2.rescale(constraints);
+    other = other.scale(resolution);
 
-    LEDColor[] colorsOut = new LEDColor[constraints.getCount()];
+    LEDColor[] colorsOut = new LEDColor[resolution];
 
-    for (int ledIndex = constraints.getStartIndex(); ledIndex < constraints.getCount(); ledIndex++) {
-      LEDColor color1 = state1.getColors()[ledIndex];
-      LEDColor color2 = state2.getColors()[ledIndex];
+    for (int ledIndex = 0; ledIndex < resolution; ledIndex++) {
+      LEDColor base = colors[ledIndex];
+      LEDColor overlay = other.colors[ledIndex];
 
-      if ((color1 == null) && (color2 == null)) colorsOut[ledIndex] = new LEDColor();
-      if (color1 == null) colorsOut[ledIndex] = color2;
-      if (color2 == null) colorsOut[ledIndex] = color1;
-      else colorsOut[ledIndex] = color1.merge(color2);
+      if ((base == null) && (overlay == null)) colorsOut[ledIndex] = new LEDColor();
+      if (base == null) colorsOut[ledIndex] = overlay;
+      if (overlay == null) colorsOut[ledIndex] = base;
+      else colorsOut[ledIndex] = base.merge(overlay);
     }
 
-    return new StripState(colorsOut, constraints);
-  }
-
-  public static StripState createSolid(LEDColor color) {
-    return new StripState(new LEDColor[] {color});
+    return new StripState(colorsOut);
   }
 }

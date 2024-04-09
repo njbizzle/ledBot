@@ -3,14 +3,14 @@ package frc.robot.ledTools;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AnimationManager {
+public class StripManager {
   private ArrayList<Strip> m_outputStrips;
 
-  public AnimationManager(Strip outputStrip) {
+  public StripManager(Strip outputStrip) {
     this(new ArrayList<Strip>(List.of(outputStrip)));
   }
 
-  public AnimationManager(ArrayList<Strip> outputStrips) {
+  public StripManager(ArrayList<Strip> outputStrips) {
     m_outputStrips = outputStrips;
   }
 
