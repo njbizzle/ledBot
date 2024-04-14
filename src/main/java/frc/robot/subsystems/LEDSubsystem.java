@@ -4,19 +4,13 @@
 
 package frc.robot.subsystems;
 
-import java.util.AbstractMap.SimpleEntry;
-import java.util.function.IntSupplier;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
 import com.ctre.phoenix.led.CANdle;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants.LEDConstants;
 import frc.robot.ledTools.LEDManager;
 import frc.robot.ledTools.Strip;
-import frc.robot.ledTools.animation.AnimationState;
+import frc.robot.ledTools.animation.Animation;
 import frc.robot.ledTools.finals.LEDColor;
 
 public class LEDSubsystem extends SubsystemBase {
@@ -43,19 +37,14 @@ public class LEDSubsystem extends SubsystemBase {
     m_leds = new LEDManager(m_strip);
 
     m_leds.addState(
-      new AnimationState(
-        input -> {
+      new Animation(10, resolution) {
+        public boolean isActive() { return true; }
+        public LEDColor getLEDColor(double timeProgress, double ledProgress, int targetRes) {
           return new LEDColor();
-        },
-
-        new HashMap<String, IntSupplier>(Map.ofEntries(
-          new SimpleEntry<String, IntSupplier>("test", () -> 0)
-        )),
-        
-        () -> true,
-        resolution
-      )
+        }
+      }
     );
+
   }
 
   // --- GENERIC FUNCTIONS ---

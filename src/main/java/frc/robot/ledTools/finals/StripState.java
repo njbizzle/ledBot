@@ -29,11 +29,11 @@ public final class StripState {
     }
   }
 
-  public static StripState merge(ArrayList<StripState> states) {
+  public static StripState add(ArrayList<StripState> states) {
     StripState returnState = new StripState();
 
     for (StripState state : states) {
-      returnState.merge(state);
+      returnState.add(state);
     }
 
     return returnState;
@@ -60,7 +60,7 @@ public final class StripState {
     return new StripState(colorsOut);
   }
 
-  public StripState merge(StripState other) {
+  public StripState add(StripState other) {
 
     int resolution = colors.length;
 
@@ -75,7 +75,7 @@ public final class StripState {
       if ((base == null) && (overlay == null)) colorsOut[ledIndex] = new LEDColor();
       if (base == null) colorsOut[ledIndex] = overlay;
       if (overlay == null) colorsOut[ledIndex] = base;
-      else colorsOut[ledIndex] = base.merge(overlay);
+      else colorsOut[ledIndex] = base.add(overlay);
     }
 
     return new StripState(colorsOut);
