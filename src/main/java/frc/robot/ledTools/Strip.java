@@ -8,7 +8,7 @@ import frc.robot.ledTools.finals.StripState;
 public class Strip {
 
   private CANdle m_candle;
-  private final int startIndex, resolution;
+  public final int startIndex, resolution;
 
 
   public Strip(CANdle candle, int startIndex, int resolution) {
@@ -17,7 +17,7 @@ public class Strip {
     this.resolution = resolution;
   }
 
-  public void update(StripState state) {
+  public void setStrip(StripState state) {
     state = state.scale(resolution);
 
     int ledIndex = startIndex;
