@@ -34,10 +34,8 @@ public class LEDManager {
   public void checkStates() {
     for (Animation state : m_states){
       if (!state.isActive()) continue;
-        StripState stripOut = state.getStrip();
-
         m_outputStrips.forEach(
-          strip -> strip.setStrip(stripOut.scale(strip.resolution))
+          strip -> strip.setStrip(state.getStrip(strip))
         );
       
     }

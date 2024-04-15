@@ -7,6 +7,8 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.led.CANdle;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import java.lang.Math.*;
+
 import frc.robot.Constants.LEDConstants;
 import frc.robot.ledTools.LEDManager;
 import frc.robot.ledTools.Strip;
@@ -36,14 +38,20 @@ public class LEDSubsystem extends SubsystemBase {
 
     m_leds = new LEDManager(m_strip);
 
-    m_leds.addState(
-      new Animation(10, resolution) {
-        public boolean isActive() { return true; }
-        public LEDColor getLEDColor(double timeProgress, double ledProgress, int targetRes) {
-          return new LEDColor();
-        }
+    m_leds.addState(new Animation(10, resolution, () -> false) {
+      public LEDColor getLEDColor(double timeProgress, double ledProgress, Strip stripOut) {
+        return new LEDColor();
       }
-    );
+    });
+
+    m_leds.addState(new Animation(10, resolution, () -> true) {
+      public LEDColor getLEDColor(double timeProgress, double ledProgress, Strip stripOut) {
+        if (Math.abs(Math.sin(timeProgress * 2 * Math.PI) - ledProgress) > 0.1){
+          return new LEDColor(255, 255, 255);
+        }
+        return new LEDColor();
+      }
+    });
 
   }
 
