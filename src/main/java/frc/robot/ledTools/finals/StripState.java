@@ -15,6 +15,9 @@ public final class StripState {
     this(new LEDColor[resolution]);
   }
 
+  public StripState(LEDColor color) {
+    this.colors = new LEDColor[]{color};
+  }
 
   public StripState(LEDColor[] colors) {
     if (colors.length != 0){
@@ -29,16 +32,6 @@ public final class StripState {
     }
   }
 
-  public static StripState add(ArrayList<StripState> states) {
-    StripState returnState = new StripState();
-
-    for (StripState state : states) {
-      returnState.add(state);
-    }
-
-    return returnState;
-  }
-
   public StripState scale(int resolution) {
     LEDColor[] colorsOut = new LEDColor[resolution];
 
@@ -50,7 +43,7 @@ public final class StripState {
       indexInt = (int) Math.round(indexDouble);
 
       indexInt = Math.max(indexInt, 0);
-      indexInt = Math.min(indexInt, colors.length);
+      indexInt = Math.min(indexInt, colors.length - 1);
 
       colorsOut[rescaledIndex] = colors[indexInt];
 
@@ -60,17 +53,29 @@ public final class StripState {
     return new StripState(colorsOut);
   }
 
-  public StripState add(StripState other) {
+  public static StripState add(ArrayList<StripState> states) {
+    StripState returnState = new StripState();
 
-    int resolution = colors.length;
+    for (StripState state : states) {
+      returnState.add(state);
+    }
 
-    other = other.scale(resolution);
+    return returnState;
+  }
+
+  public StripState add(StripState overlayState) {
+
+    int resolution = Math.max(colors.length, overlayState.colors.length);
+    
+
+    StripState baseState = scale(resolution);
+    overlayState = overlayState.scale(resolution);
 
     LEDColor[] colorsOut = new LEDColor[resolution];
 
     for (int ledIndex = 0; ledIndex < resolution; ledIndex++) {
-      LEDColor base = colors[ledIndex];
-      LEDColor overlay = other.colors[ledIndex];
+      LEDColor base = baseState.colors[ledIndex];
+      LEDColor overlay = overlayState.colors[ledIndex];
 
       if ((base == null) && (overlay == null)) colorsOut[ledIndex] = new LEDColor();
       if (base == null) colorsOut[ledIndex] = overlay;

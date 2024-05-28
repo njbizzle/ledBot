@@ -39,13 +39,31 @@ public final class LEDColor extends Color {
   public LEDColor add(LEDColor other) { // overlay other if needed
     double aThis = (double) a / 255d;
     double aOther = (double) other.a / 255d;
-    if (aThis + aOther > 255) aOther = aThis - 255;
-    
-    return new LEDColor(
+
+    aThis *= 1 / (aThis + aOther);
+    aOther *= 1 / (aThis + aOther);
+    // if (aThis + aOther > 1) {
+    //   aThis = 1;
+    //   aOther = aThis - 1;
+    // }
+
+    // if (aThis + aOther < 1) {
+    //   aThis *= 1 / (aThis + aOther);
+    //   aOther *= 1 / (aThis + aOther);
+    // }
+    LEDColor returnColor = new LEDColor(
       (int) (r * aThis) + (int) (other.r * aOther),
       (int) (g * aThis) + (int) (other.g * aOther),
       (int) (b * aThis) + (int) (other.b * aOther),
       a + other.a
     );
+
+    // System.out.println("base : " + this + " other : " + other + " result : " + returnColor);
+    return returnColor;
+  }
+
+  @Override
+  public String toString() {
+    return r + " " + g +  " " + b;
   }
 }

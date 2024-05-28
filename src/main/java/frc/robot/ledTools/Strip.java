@@ -17,7 +17,7 @@ public class Strip {
     this.resolution = resolution;
   }
 
-  public void setStrip(StripState state) {
+  public void setStripState(StripState state) {
     state = state.scale(resolution);
 
     int ledIndex = startIndex;
